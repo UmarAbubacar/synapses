@@ -1,4 +1,6 @@
-# Pyramidal Cell Demo
+# Pyramidal Cell + Synapses Demo
+
+Note: To use this demo you must be on the ```umar_neurite_test``` branch of BioDynaMo.
 
 This demo simulates the growth of a pyramidal cell. 
 
