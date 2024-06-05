@@ -177,14 +177,14 @@ inline int Simulate(int argc, const char** argv) {
   AddInitialNeuron({150, 100, 0});
   AddInitialNeuron({150, 125, 0});
 
-  // Schedule Synapsification operation
+  // Schedule synapse operation
   auto* synapsification_op = NewOperation("synapse_op");
   simulation.GetScheduler()->ScheduleOp(synapsification_op);
 
   CreateExtracellularSubstances(simulation.GetParam());
   simulation.GetScheduler()->Simulate(500);
   SaveNeuronMorphology(simulation);
-  export_adjacency_matrix_with_all_neurons();
+  export_connection_list();
   std::cout << "Simulation completed successfully!" << std::endl;
   return 0;
 }

@@ -36,35 +36,18 @@ class basic_neuron : public neuroscience::NeuronSoma {
   explicit basic_neuron(const Real3& position) : Base(position) {}
   virtual ~basic_neuron() {}
 
-  /// If basic_neuron divides, the daughter has to initialize its attributes
-  void Initialize(const NewAgentEvent& event) override {
-    Base::Initialize(event);
-
-    if (auto* mother = dynamic_cast<basic_neuron*>(event.existing_agent)) {
-      cell_colour_ = mother->cell_colour_;
-      this->SetMass(mother->GetMass());
-    }
-  }
-
   void AddSynapse(basic_neuron* target, real_t distance, int strength = 1,
                   int time = 0);
   const std::vector<Synapses>& GetSynapses() const { return synapses_; }
 
-  void SetCellColour(int cell_colour) { cell_colour_ = cell_colour; }
-  int GetCellColour() const { return cell_colour_; }
-
   int GetState() const { return state_; }
   void SetState(int state) { state_ = state; }
 
-  int GetCellType() const { return cell_type_; }
-  void SetCellType(int cell_type) { cell_type_ = cell_type; }
-
-  int cell_colour_;
   int state_ = States::progenitor;
-  int cell_type_;
   std::vector<Synapses> synapses_;
 };
 
+// This class represents a Synapse in the simulation
 class Synapses {
  public:
   // Default constructor
@@ -96,12 +79,20 @@ class Synapses {
   int time_;
 };
 
+// This function adds a new Synapse to the current neuron.
+// It takes a target neuron, the distance to the target, the strength of the
+// synapse, and the time of synapse formation as arguments. It creates a new
+// Synapse with these parameters and adds it to the neuron's list of synapses.
 inline void basic_neuron::AddSynapse(basic_neuron* target, real_t distance,
                                      int strength, int time) {
   Synapses synapse(this, target, distance, strength, time);
   synapses_.push_back(synapse);
 }
 
+// This function finds the parent neuron of a given neurite element.
+// It takes a neurite element as an argument and iterates up the tree of neurite
+// elements until it finds a neuron. It returns the found neuron, or nullptr if
+// no neuron was found.
 inline basic_neuron* FindParentNeuron(NeuriteElement* neurite) {
   basic_neuron* mother_neuron = nullptr;
 
@@ -114,6 +105,10 @@ inline basic_neuron* FindParentNeuron(NeuriteElement* neurite) {
   return mother_neuron;
 }
 
+// This function checks if there is a synapse between two given neurons.
+// It iterates over the synapses of each neuron and checks if the target of any
+// synapse is the other neuron. If such a synapse is found, it returns true.
+// Otherwise, it returns false.
 inline bool hasSynapse(const basic_neuron* neuronA,
                        const basic_neuron* neuronB) {
   for (const auto& synapse : neuronA->GetSynapses()) {
@@ -129,6 +124,11 @@ inline bool hasSynapse(const basic_neuron* neuronA,
   return false;
 }
 
+// This function creates a synapse between two given neurite elements.
+// It first finds the parent neurons of the neurite elements.
+// If both parent neurons are valid and there is no existing synapse between
+// them, it adds a new synapse from the first neuron to the second. The synapse
+// is characterized by its distance, strength, and the time when it was formed.
 inline void CreateSynapseBetweenNeurites(NeuriteElement* neurite1,
                                          NeuriteElement* neurite2,
                                          real_t distance = 0.0,
@@ -149,6 +149,13 @@ inline void CreateSynapseBetweenNeurites(NeuriteElement* neurite1,
   }
 }
 
+// This struct is a custom hash function for pairs of values.
+// It is used to create a unique hash for each pair by XORing the hashes of the
+// first and second values of the pair. The PairHash struct is used in the
+// export_connection_list function to create a unique hash for
+// each pair of neuron UIDs. This is necessary because the adjacency matrix is
+// stored in an std::unordered_map where each key is a pair of neuron UIDs and
+// each value is the count of synapses between the pair of neurons.
 struct PairHash {
   template <class T1, class T2>
   std::size_t operator()(const std::pair<T1, T2>& pair) const {
@@ -156,7 +163,14 @@ struct PairHash {
   }
 };
 
-inline void export_adjacency_matrix_with_all_neurons() {
+// This function exports the adjacency matrix of all neurons in the simulation
+// to a CSV file. The adjacency matrix represents the connections between
+// neurons. Each row in the CSV file represents a connection from one neuron to
+// another. The columns of the CSV file are the source neuron's UID, the target
+// neuron's UID, the cell type of the source neuron, and the count of synapses
+// between the source and target neurons.
+inline void export_connection_list() {
+  // Get the active simulation and its resource manager
   auto* sim = Simulation::GetActive();
   auto* rm = sim->GetResourceManager();
 
