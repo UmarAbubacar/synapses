@@ -105,12 +105,11 @@ inline void MyNeuron::AddSynapse(MyNeuron* target, real_t distance,
 
 inline MyNeuron* FindParentNeuron(NeuriteElement* neurite) {
   MyNeuron* mother_neuron = nullptr;
-  auto* dendrite = neurite;
 
-  while (dendrite && !mother_neuron) {
-    auto* mother = dendrite->GetMother().Get();
+  while (neurite && !mother_neuron) {
+    auto* mother = neurite->GetMother().Get();
     mother_neuron = dynamic_cast<MyNeuron*>(mother);
-    dendrite = dynamic_cast<NeuriteElement*>(mother);
+    neurite = dynamic_cast<NeuriteElement*>(mother);
   }
 
   return mother_neuron;

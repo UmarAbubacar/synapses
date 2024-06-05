@@ -24,11 +24,11 @@ struct SynapseFormation : public Behavior {
   BDM_BEHAVIOR_HEADER(SynapseFormation, Behavior, 1);
 
   AgentUid DendriticDetector(Agent* agent, Real3* neighbours_direction) {
-    auto* dendrite = bdm_static_cast<NeuriteElement*>(agent);
+    auto* neurite = bdm_static_cast<NeuriteElement*>(agent);
     auto* sim = Simulation::GetActive();
     auto* ctxt = sim->GetExecutionContext();
 
-    auto* mother = dynamic_cast<NeuriteElement*>(dendrite)->GetMother().Get();
+    auto* mother = dynamic_cast<NeuriteElement*>(neurite)->GetMother().Get();
     MyNeuron* mother_neuron = dynamic_cast<MyNeuron*>(mother);
     while (mother_neuron == nullptr && mother != nullptr) {
       mother = dynamic_cast<NeuriteElement*>(mother)->GetMother().Get();
@@ -66,9 +66,9 @@ struct SynapseFormation : public Behavior {
         int neighbor_mother_cell_uid = neighbor_mother_neuron->GetUid();
         if (neighbor_mother_cell_uid != mother_cell_uid) {
           closest_neighbour_direction +=
-              neighbor_den->GetPosition() - dendrite->GetPosition();
+              neighbor_den->GetPosition() - neurite->GetPosition();
 
-          // NOTE: squared distance is the distance between the two dendrites
+          // NOTE: squared distance is the distance between the two neurites
           real_t distance = std::sqrt(squared_distance);
           if (distance < closest_distance && distance < 1) {
             closest_neighbour_uid = neighbor_den->GetUid().GetIndex();
@@ -77,10 +77,10 @@ struct SynapseFormation : public Behavior {
         }
       }
     });
-    ctxt->ForEachNeighbor(print_id_distance, *dendrite, 25);  // 25 is the
-                                                              // squared
-                                                              // distance
-                                                              // threshold
+    ctxt->ForEachNeighbor(print_id_distance, *neurite, 25);  // 25 is the
+                                                             // squared
+                                                             // distance
+                                                             // threshold
     *neighbours_direction = closest_neighbour_direction;
     return int(closest_neighbour_uid) != -1 ? AgentUid(closest_neighbour_uid)
                                             : AgentUid(-1);
@@ -93,7 +93,7 @@ struct SynapseFormation : public Behavior {
     int time_step =
         Simulation::GetActive()->GetScheduler()->GetSimulatedSteps();
 
-    auto* dendrite = bdm_static_cast<NeuriteElement*>(agent);
+    auto* neurite = bdm_static_cast<NeuriteElement*>(agent);
 
     if (!synapsed_) {
       Real3 neighbours_direction;
@@ -102,7 +102,7 @@ struct SynapseFormation : public Behavior {
 
       if (closest_neighbour_uid != AgentUid(-1)) {
         CreateSynapseBetweenNeurites(
-            dendrite,
+            neurite,
             dynamic_cast<NeuriteElement*>(rm->GetAgent(closest_neighbour_uid)),
             0.0, 1, time_step);
       }
