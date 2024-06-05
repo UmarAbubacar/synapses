@@ -11,6 +11,12 @@
 // regarding copyright ownership.
 //
 // -----------------------------------------------------------------------------
+#include "MyNeuron.h"
+#include "synapse_op.h"
 #include "pyramidal_cell.h"
+
+namespace bdm {
+BDM_REGISTER_OP(Synapsification_op, "Synapsification_op", kCpu);
+}  // namespace bdm
 
 int main(int argc, const char** argv) { return bdm::Simulate(argc, argv); }

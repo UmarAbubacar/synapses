@@ -16,6 +16,7 @@
 
 #include <fstream>
 #include <iostream>
+#include "MyNeuron.h"
 #include "biodynamo.h"
 #include "neuroscience/neuroscience.h"
 
@@ -129,7 +130,7 @@ struct BasalDendriteGrowth : public Behavior {
 };
 
 inline void AddInitialNeuron(const Real3& position) {
-  auto* soma = new neuroscience::NeuronSoma(position);
+  auto* soma = new MyNeuron(position);
   soma->SetDiameter(10);
   Simulation::GetActive()->GetExecutionContext()->AddAgent(soma);
 
@@ -172,10 +173,18 @@ inline void SaveNeuronMorphology(Simulation& sim) {
 inline int Simulate(int argc, const char** argv) {
   neuroscience::InitModule();
   Simulation simulation(argc, argv);
-  AddInitialNeuron({150, 150, 0});
+  AddInitialNeuron({150, 75, 0});
+  AddInitialNeuron({150, 100, 0});
+  AddInitialNeuron({150, 125, 0});
+
+  // Schedule Synapsification operation
+  auto* synapsification_op = NewOperation("Synapsification_op");
+  simulation.GetScheduler()->ScheduleOp(synapsification_op);
+
   CreateExtracellularSubstances(simulation.GetParam());
   simulation.GetScheduler()->Simulate(500);
   SaveNeuronMorphology(simulation);
+  export_adjacency_matrix_with_all_neurons();
   std::cout << "Simulation completed successfully!" << std::endl;
   return 0;
 }

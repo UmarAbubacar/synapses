@@ -1,0 +1,7 @@
+Source_UID,Target_UID,Cell_Type,Synapse_Count
+6,11,0,1
+6,0,0,1
+0,11,0,1
+11,11,0,0
+6,6,0,0
+0,0,0,0
