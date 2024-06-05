@@ -22,7 +22,7 @@
 
 namespace bdm {
 
-enum States { progenitor, dead };
+enum States { alive, dead };
 
 class basic_neuron;
 class Synapses;
@@ -43,7 +43,7 @@ class basic_neuron : public neuroscience::NeuronSoma {
   int GetState() const { return state_; }
   void SetState(int state) { state_ = state; }
 
-  int state_ = States::progenitor;
+  int state_ = States::alive;
   std::vector<Synapses> synapses_;
 };
 
