@@ -13,7 +13,7 @@
 // -----------------------------------------------------------------------------
 #include "MyNeuron.h"
 #include "synapse_op.h"
-#include "pyramidal_cell.h"
+#include "synapses.h"
 
 namespace bdm {
 BDM_REGISTER_OP(Synapsification_op, "Synapsification_op", kCpu);

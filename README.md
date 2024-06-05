@@ -9,7 +9,7 @@ bdm run
 ```
 
 The simulation will use the `bdm.json` parameter file and will create
-visualization files in directory `output/pyramidal_cell`.
+visualization files in directory `output/synapses`.
 
 To render an image of the final neuron, execute:
 
@@ -24,7 +24,7 @@ The additional parameter `--screenshots`, tells the script to render an image.
 To interactively explore the simulation output with the default visualization settings, execute: 
 
 ```
-paraview output/pyramidal_cell/pyramidal_cell.pvsm
+paraview output/synapses/synapses.pvsm
 ```
 
 To use the same settings as in the `pvbatch` step, execute:

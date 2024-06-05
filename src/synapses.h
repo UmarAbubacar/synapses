@@ -11,8 +11,8 @@
 // regarding copyright ownership.
 //
 // -----------------------------------------------------------------------------
-#ifndef PYRAMIDAL_CELL_H_
-#define PYRAMIDAL_CELL_H_
+#ifndef SYNAPSES_H_
+#define SYNAPSES_H_
 
 #include <fstream>
 #include <iostream>
@@ -191,4 +191,4 @@ inline int Simulate(int argc, const char** argv) {
 
 }  // namespace bdm
 
-#endif  // PYRAMIDAL_CELL_H_
+#endif  // SYNAPSES_H_
