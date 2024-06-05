@@ -29,10 +29,10 @@ struct SynapseFormation : public Behavior {
     auto* ctxt = sim->GetExecutionContext();
 
     auto* mother = dynamic_cast<NeuriteElement*>(neurite)->GetMother().Get();
-    MyNeuron* mother_neuron = dynamic_cast<MyNeuron*>(mother);
+    basic_neuron* mother_neuron = dynamic_cast<basic_neuron*>(mother);
     while (mother_neuron == nullptr && mother != nullptr) {
       mother = dynamic_cast<NeuriteElement*>(mother)->GetMother().Get();
-      mother_neuron = dynamic_cast<MyNeuron*>(mother);
+      mother_neuron = dynamic_cast<basic_neuron*>(mother);
     }
 
     int mother_cell_uid;
@@ -52,15 +52,15 @@ struct SynapseFormation : public Behavior {
         auto* neighbor_mother =
             dynamic_cast<NeuriteElement*>(neighbor_den)->GetMother().Get();
 
-        MyNeuron* neighbor_mother_neuron =
-            dynamic_cast<MyNeuron*>(neighbor_mother);
+        basic_neuron* neighbor_mother_neuron =
+            dynamic_cast<basic_neuron*>(neighbor_mother);
 
         // if it is not a neuron, keep going up the tree
         while (neighbor_mother_neuron == nullptr &&
                neighbor_mother != nullptr) {
           neighbor_mother =
               dynamic_cast<NeuriteElement*>(neighbor_mother)->GetMother().Get();
-          neighbor_mother_neuron = dynamic_cast<MyNeuron*>(neighbor_mother);
+          neighbor_mother_neuron = dynamic_cast<basic_neuron*>(neighbor_mother);
         }
 
         int neighbor_mother_cell_uid = neighbor_mother_neuron->GetUid();

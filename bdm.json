@@ -12,11 +12,10 @@
         "visualization_interval": 1,
         "visualize_agents": {
             "NeuriteElement": [],
-            "MyNeuron": []
+            "basic_neuron": []
         }
     },
     "bdm::neuroscience::Param": {
         "neurite_max_length": 2
     }
 }
-

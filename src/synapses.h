@@ -16,7 +16,7 @@
 
 #include <fstream>
 #include <iostream>
-#include "MyNeuron.h"
+#include "basic_neuron.h"
 #include "biodynamo.h"
 #include "neuroscience/neuroscience.h"
 
@@ -130,7 +130,7 @@ struct BasalDendriteGrowth : public Behavior {
 };
 
 inline void AddInitialNeuron(const Real3& position) {
-  auto* soma = new MyNeuron(position);
+  auto* soma = new basic_neuron(position);
   soma->SetDiameter(10);
   Simulation::GetActive()->GetExecutionContext()->AddAgent(soma);
 

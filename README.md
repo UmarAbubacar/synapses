@@ -2,7 +2,12 @@
 
 Note: To use this demo you must be on the ```umar_neurite_test``` branch of BioDynaMo.
 
-This demo simulates the growth of a pyramidal cell. 
+This demo simulates the growth of a pyramidal cell. The simulation consists of the following files:
+
+The files in the `src` directory contain the implementation of the simulation.
+synapses.h and synapses.cc are the files that contain the implementation of the simulation with the code for the custom neurons and synapses in the file basic_neuron. 
+The synapse operation in this example is a behaviour defined in the synapse_op.h file that is scheduled to run on the last iteration of the simulation.
+
 
 To compile and run the simulation, execute the following command in the terminal.
 
@@ -16,23 +21,12 @@ visualization files in directory `output/synapses`.
 To render an image of the final neuron, execute:
 
 ```
-pvbatch ./pv_script.py --screenshots
+bdm view
 ```
-
-The `pv_script.py` loads the visualization files and adjusts the default settings (e.g. camera, background color, iteration step, and more).
-The additional parameter `--screenshots`, tells the script to render an image.
-`pvbatch` executes this script without opening a window.
-
-To interactively explore the simulation output with the default visualization settings, execute: 
+Press play and interactivly adjust the camera to get the desired view of the neurons. 
 
 ```
 paraview output/synapses/synapses.pvsm
-```
-
-To use the same settings as in the `pvbatch` step, execute:
-
-```
-paraview --script=./pv_script.py
 ```
 
 For more information about the simulation itself have a look at the following publication:

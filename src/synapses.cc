@@ -11,9 +11,9 @@
 // regarding copyright ownership.
 //
 // -----------------------------------------------------------------------------
-#include "MyNeuron.h"
-#include "synapse_op.h"
 #include "synapses.h"
+#include "basic_neuron.h"
+#include "synapse_op.h"
 
 namespace bdm {
 BDM_REGISTER_OP(Synapsification_op, "Synapsification_op", kCpu);

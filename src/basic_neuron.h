@@ -24,30 +24,29 @@ namespace bdm {
 
 enum States { progenitor, dead };
 
-class MyNeuron;
+class basic_neuron;
 class Synapses;
 
-class MyNeuron
-    : public neuroscience::NeuronSoma {  // our object extends the Cell object
-  // create the header with our new data member
-  BDM_AGENT_HEADER(MyNeuron, neuroscience::NeuronSoma, 1);
+// our object extends the Cell object create the header with our new data member
+class basic_neuron : public neuroscience::NeuronSoma {
+  BDM_AGENT_HEADER(basic_neuron, neuroscience::NeuronSoma, 1);
 
  public:
-  MyNeuron() {}
-  explicit MyNeuron(const Real3& position) : Base(position) {}
-  virtual ~MyNeuron() {}
+  basic_neuron() {}
+  explicit basic_neuron(const Real3& position) : Base(position) {}
+  virtual ~basic_neuron() {}
 
-  /// If MyNeuron divides, the daughter has to initialize its attributes
+  /// If basic_neuron divides, the daughter has to initialize its attributes
   void Initialize(const NewAgentEvent& event) override {
     Base::Initialize(event);
 
-    if (auto* mother = dynamic_cast<MyNeuron*>(event.existing_agent)) {
+    if (auto* mother = dynamic_cast<basic_neuron*>(event.existing_agent)) {
       cell_colour_ = mother->cell_colour_;
       this->SetMass(mother->GetMass());
     }
   }
 
-  void AddSynapse(MyNeuron* target, real_t distance, int strength = 1,
+  void AddSynapse(basic_neuron* target, real_t distance, int strength = 1,
                   int time = 0);
   const std::vector<Synapses>& GetSynapses() const { return synapses_; }
 
@@ -73,7 +72,7 @@ class Synapses {
       : source_(nullptr), target_(nullptr), distance_(-1.0), strength_(0) {}
 
   // Parameterized constructor
-  Synapses(MyNeuron* source, MyNeuron* target, double distance = 0.0,
+  Synapses(basic_neuron* source, basic_neuron* target, double distance = 0.0,
            int strength = 1, int time = 0)
       : source_(source),
         target_(target),
@@ -81,8 +80,8 @@ class Synapses {
         strength_(strength),
         time_(time) {}
 
-  MyNeuron* GetSource() const { return source_; }
-  MyNeuron* GetTarget() const { return target_; }
+  basic_neuron* GetSource() const { return source_; }
+  basic_neuron* GetTarget() const { return target_; }
   double GetDistance() const { return distance_; }
   int GetStrength() const { return strength_; }
   int GetTime() const { return time_; }
@@ -90,32 +89,33 @@ class Synapses {
   void IncreaseStrength(int amount = 1) { strength_ += amount; }
 
  private:
-  MyNeuron* source_;
-  MyNeuron* target_;
+  basic_neuron* source_;
+  basic_neuron* target_;
   double distance_;
   int strength_;
   int time_;
 };
 
-inline void MyNeuron::AddSynapse(MyNeuron* target, real_t distance,
-                                 int strength, int time) {
+inline void basic_neuron::AddSynapse(basic_neuron* target, real_t distance,
+                                     int strength, int time) {
   Synapses synapse(this, target, distance, strength, time);
   synapses_.push_back(synapse);
 }
 
-inline MyNeuron* FindParentNeuron(NeuriteElement* neurite) {
-  MyNeuron* mother_neuron = nullptr;
+inline basic_neuron* FindParentNeuron(NeuriteElement* neurite) {
+  basic_neuron* mother_neuron = nullptr;
 
   while (neurite && !mother_neuron) {
     auto* mother = neurite->GetMother().Get();
-    mother_neuron = dynamic_cast<MyNeuron*>(mother);
+    mother_neuron = dynamic_cast<basic_neuron*>(mother);
     neurite = dynamic_cast<NeuriteElement*>(mother);
   }
 
   return mother_neuron;
 }
 
-inline bool hasSynapse(const MyNeuron* neuronA, const MyNeuron* neuronB) {
+inline bool hasSynapse(const basic_neuron* neuronA,
+                       const basic_neuron* neuronB) {
   for (const auto& synapse : neuronA->GetSynapses()) {
     if (synapse.GetTarget() == neuronB) {
       return true;
@@ -134,8 +134,8 @@ inline void CreateSynapseBetweenNeurites(NeuriteElement* neurite1,
                                          real_t distance = 0.0,
                                          int strength = 1, int time = 0) {
   // Trace back to parent neurons
-  MyNeuron* neuronA = FindParentNeuron(neurite1);
-  MyNeuron* neuronB = FindParentNeuron(neurite2);
+  basic_neuron* neuronA = FindParentNeuron(neurite1);
+  basic_neuron* neuronB = FindParentNeuron(neurite2);
 
   // Check if both neurons are valid
   if (neuronA && neuronB) {
@@ -168,7 +168,7 @@ inline void export_adjacency_matrix_with_all_neurons() {
 
   // Populate the set of unique neuron UIDs and their cell types
   rm->ForEachAgent([&](Agent* agent) {
-    auto* neuron = dynamic_cast<MyNeuron*>(agent);
+    auto* neuron = dynamic_cast<basic_neuron*>(agent);
     if (neuron && neuron->GetState() != States::dead) {
       int uid = neuron->GetUid();
       cell_types[uid] = neuron->GetState();
@@ -181,7 +181,7 @@ inline void export_adjacency_matrix_with_all_neurons() {
   });
 
   // Export to CSV
-  std::ofstream file("adjacency_matrix_all.csv");
+  std::ofstream file("connection_list.csv");
   if (!file.is_open()) {
     std::cout << "Failed to open file" << std::endl;
     return;
