@@ -123,8 +123,8 @@ inline void Synapsification(Agent* axon_element) {
   axon->AddBehavior(new SynapseFormation());
 }
 
-struct Synapsification_op : public StandaloneOperationImpl {
-  BDM_OP_HEADER(Synapsification_op);
+struct synapse_op : public StandaloneOperationImpl {
+  BDM_OP_HEADER(synapse_op);
 
   void operator()() override {
     auto* rm = Simulation::GetActive()->GetResourceManager();

@@ -5,8 +5,8 @@ Note: To use this demo you must be on the ```umar_neurite_test``` branch of BioD
 This demo simulates the growth of a pyramidal cell. The simulation consists of the following files:
 
 The files in the `src` directory contain the implementation of the simulation.
-synapses.h and synapses.cc are the files that contain the implementation of the simulation with the code for the custom neurons and synapses in the file basic_neuron. 
-The synapse operation in this example is a behaviour defined in the synapse_op.h file that is scheduled to run on the last iteration of the simulation.
+```synapses.h``` and ```synapses.cc``` are the files that contain the implementation of the simulation with the code for the custom neurons and synapses in the file basic_neuron. 
+The synapse operation in this example is a behaviour defined in the ```synapse_op.h``` file that is scheduled to run on the last iteration of the simulation.
 
 
 To compile and run the simulation, execute the following command in the terminal.

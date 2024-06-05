@@ -178,7 +178,7 @@ inline int Simulate(int argc, const char** argv) {
   AddInitialNeuron({150, 125, 0});
 
   // Schedule Synapsification operation
-  auto* synapsification_op = NewOperation("Synapsification_op");
+  auto* synapsification_op = NewOperation("synapse_op");
   simulation.GetScheduler()->ScheduleOp(synapsification_op);
 
   CreateExtracellularSubstances(simulation.GetParam());
